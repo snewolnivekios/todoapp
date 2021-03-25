@@ -6,11 +6,13 @@ pipeline {
   }
   agent any
   stages {
+    /* Clone occurring via config for Pipeline script from SCM
     stage('Cloning git') {
       steps {
         git 'https://github.com/snewolnivekios/todoapp.git'
       }
     }
+    */
     stage('Building image') {
       steps{
         script {
