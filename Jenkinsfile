@@ -6,22 +6,24 @@ pipeline {
   }
   agent any
   stages {
-    /* Clone occurring via config for Pipeline script from SCM
-    stage('Cloning git') {
-      steps {
-        git 'https://github.com/snewolnivekios/todoapp.git'
-      }
-    }
-    */
-    stage('Building image') {
+    stage('Build image') {
       steps{
         script {
           dockerImage = docker.build registry + ":$BUILD_NUMBER"
         }
       }
     }
+    stage('Test image') {
+      steps {
+        script {
+          dockerImage.inside {
+            sh 'node --version'
+          }
+        }
+      }
+    }
     stage('Deploy image') {
-      steps{
+      steps {
         script {
           docker.withRegistry( '', registryCredential ) {
             dockerImage.push()
